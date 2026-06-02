@@ -42,7 +42,7 @@ HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 }
 
-COLUMNS = ['生產地', '品牌', '上市時間', '型號', '品名', '主要規格', '單價', '來源', '連結']
+COLUMNS = ['更新日期', '生產地', '品牌', '上市時間', '型號', '品名', '主要規格', '單價', '來源', '連結']
 
 # ── 工具函式 ──────────────────────────────────────────────────────────────────
 def setup_logging():
@@ -424,7 +424,7 @@ def save_to_excel(all_products: list) -> Path | None:
             c.alignment = Alignment(vertical='center', wrap_text=True)
             c.border = border
 
-    for ci, w in enumerate([12, 15, 12, 18, 40, 35, 14, 14, 45], 1):
+    for ci, w in enumerate([12, 12, 15, 12, 18, 40, 35, 14, 14, 45], 1):
         ws.column_dimensions[get_column_letter(ci)].width = w
     ws.freeze_panes = 'A2'
 
@@ -507,10 +507,13 @@ def main():
         ("Made-in-China",     fetch_made_in_china),
     ]
 
+    today_str = datetime.now().strftime('%Y-%m-%d')
     all_products = []
     for name, func in sources:
         print(f"  正在抓取 {name} ...", end='', flush=True)
         prods = func()
+        for p in prods:
+            p['更新日期'] = today_str
         all_products.extend(prods)
         print(f" {len(prods)} 筆")
         time.sleep(2)
