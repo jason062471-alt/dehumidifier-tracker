@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 """
 除濕機全球資料每日自動收集腳本
-搜尋台灣、美國、中國等市場最新除濕機產品，儲存為 Excel 並寄送 Email。
+資料來源：品牌官網、B2B 採購平台（無需登入、穩定可靠）
 支援本機執行與 GitHub Actions 雲端排程。
 """
 
 import os
+import re
 import time
 import logging
 import smtplib
@@ -27,7 +28,6 @@ from openpyxl.utils import get_column_letter
 OUTPUT_DIR = Path(os.environ.get("OUTPUT_DIR", Path.home() / "除濕機資料"))
 LOG_FILE   = OUTPUT_DIR / "run_log.txt"
 
-# Email 憑證（由環境變數提供，GitHub Secrets 注入）
 SMTP_USER = os.environ.get("GMAIL_USER", "")
 SMTP_PASS = os.environ.get("GMAIL_APP_PASS", "")
 RECIPIENT = os.environ.get("RECIPIENT_EMAIL", "tc@mjauto.com.tw")
@@ -54,19 +54,23 @@ def setup_logging():
         encoding='utf-8',
     )
 
-def safe_get(url, params=None, timeout=20):
+def safe_get(url, params=None, timeout=25, extra_headers=None):
+    h = {**HEADERS, **(extra_headers or {})}
     try:
-        r = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
+        r = requests.get(url, params=params, headers=h, timeout=timeout)
         r.raise_for_status()
         return r
     except Exception as e:
         logging.warning(f"GET 失敗 {url}: {e}")
         return None
 
-# ── 資料來源 ──────────────────────────────────────────────────────────────────
+def clean(text: str) -> str:
+    return re.sub(r'\s+', ' ', text).strip() if text else ''
+
+# ── 台灣市場 ───────────────────────────────────────────────────────────────────
 
 def fetch_pchome_taiwan():
-    """PChome 24h 台灣市場（JSON API，穩定）"""
+    """PChome 24h（JSON API，最穩定）"""
     products = []
     for page in range(1, 4):
         r = safe_get(
@@ -81,17 +85,13 @@ def fetch_pchome_taiwan():
             break
         for p in data.get('prods', []):
             price_raw = p.get('price', {})
-            if isinstance(price_raw, dict):
-                price = price_raw.get('e', price_raw.get('m', ''))
-            else:
-                price = price_raw or ''
-            brand = p.get('BrandName', '') or p.get('brand', '')
+            price = price_raw.get('e', price_raw.get('m', '')) if isinstance(price_raw, dict) else (price_raw or '')
             products.append({
                 '生產地': '台灣/亞洲',
-                '品牌':   brand,
+                '品牌':   p.get('BrandName', '') or p.get('brand', ''),
                 '上市時間': (p.get('publishDate') or '')[:10],
                 '型號':   p.get('Id', ''),
-                '品名':   p.get('name', ''),
+                '品名':   clean(p.get('name', '')),
                 '主要規格': '',
                 '單價':   f"NT$ {price}" if price else '',
                 '來源':   'PChome 台灣',
@@ -101,201 +101,297 @@ def fetch_pchome_taiwan():
     logging.info(f"PChome 台灣：{len(products)} 筆")
     return products
 
+# ── 美國市場 ───────────────────────────────────────────────────────────────────
 
-def fetch_momo_taiwan():
-    """momo 購物網台灣市場"""
+def fetch_lg_us():
+    """LG 美國官網除濕機"""
     products = []
-    try:
-        r = safe_get(
-            "https://www.momoshop.com.tw/search/searchShop.jsp",
-            params={'keyword': '除濕機', 'searchType': 1, 'sortBy': 'newDown', 'curPage': 1},
-        )
-        if not r:
-            return products
-        soup = BeautifulSoup(r.text, 'lxml')
-        for item in soup.select('li.goodsItemLi')[:20]:
-            name_el  = item.select_one('.prdName')
-            price_el = item.select_one('.price b')
-            brand_el = item.select_one('.brandName')
-            link_el  = item.select_one('a.goods-img-a')
-            name  = name_el.text.strip()  if name_el  else ''
-            price = price_el.text.strip() if price_el else ''
-            brand = brand_el.text.strip() if brand_el else ''
-            href  = 'https://www.momoshop.com.tw' + link_el['href'] if link_el else ''
-            if name:
-                products.append({
-                    '生產地': '台灣/亞洲',
-                    '品牌':   brand,
-                    '上市時間': datetime.now().strftime('%Y-%m'),
-                    '型號':   '',
-                    '品名':   name,
-                    '主要規格': '',
-                    '單價':   f"NT$ {price}" if price else '',
-                    '來源':   'momo 購物',
-                    '連結':   href,
-                })
-    except Exception as e:
-        logging.warning(f"momo 抓取失敗: {e}")
-    logging.info(f"momo 台灣：{len(products)} 筆")
+    r = safe_get("https://www.lg.com/us/dehumidifiers")
+    if not r:
+        return products
+    soup = BeautifulSoup(r.text, 'lxml')
+    for item in soup.select('li.item, .product-card, [data-product-id]'):
+        name_el  = item.select_one('.product-name, .model-name, h3, h4')
+        price_el = item.select_one('.price, .product-price, [class*="price"]')
+        model_el = item.select_one('.model-id, [class*="model"]')
+        link_el  = item.select_one('a[href]')
+        spec_el  = item.select_one('.spec, .capacity, [class*="spec"]')
+        name  = clean(name_el.text)  if name_el  else ''
+        price = clean(price_el.text) if price_el else ''
+        model = clean(model_el.text) if model_el else ''
+        spec  = clean(spec_el.text)  if spec_el  else ''
+        href  = link_el['href']      if link_el  else ''
+        if href and not href.startswith('http'):
+            href = 'https://www.lg.com' + href
+        if name:
+            products.append({
+                '生產地': '韓國/全球',
+                '品牌':   'LG',
+                '上市時間': datetime.now().strftime('%Y'),
+                '型號':   model,
+                '品名':   name,
+                '主要規格': spec,
+                '單價':   f"USD {price}" if price else '',
+                '來源':   'LG 美國官網',
+                '連結':   href,
+            })
+    logging.info(f"LG 美國：{len(products)} 筆")
     return products
 
 
-def fetch_amazon_us():
-    """Amazon 美國市場"""
+def fetch_frigidaire_us():
+    """Frigidaire 美國官網除濕機"""
     products = []
-    try:
-        r = safe_get(
-            "https://www.amazon.com/s",
-            params={'k': 'dehumidifier new 2025 2026', 's': 'date-desc-rank'},
-        )
-        if not r:
-            return products
-        soup = BeautifulSoup(r.text, 'lxml')
-        for item in soup.select('div[data-component-type="s-search-result"]')[:20]:
-            name_el  = item.select_one('h2 a span')
-            price_el = item.select_one('span.a-price-whole')
-            brand_el = item.select_one('span.a-size-base-plus')
-            link_el  = item.select_one('h2 a')
-            name  = name_el.text.strip()  if name_el  else ''
-            price = price_el.text.strip() if price_el else ''
-            brand = brand_el.text.strip() if brand_el else ''
-            href  = ('https://www.amazon.com' + link_el['href']) if link_el else ''
-            if name:
-                products.append({
-                    '生產地': '美國/全球',
-                    '品牌':   brand,
-                    '上市時間': datetime.now().strftime('%Y-%m'),
-                    '型號':   '',
-                    '品名':   name,
-                    '主要規格': '',
-                    '單價':   f"USD {price}" if price else '',
-                    '來源':   'Amazon 美國',
-                    '連結':   href,
-                })
-    except Exception as e:
-        logging.warning(f"Amazon 抓取失敗: {e}")
-    logging.info(f"Amazon 美國：{len(products)} 筆")
+    r = safe_get("https://www.frigidaire.com/Home-Comfort/Dehumidifiers/")
+    if not r:
+        return products
+    soup = BeautifulSoup(r.text, 'lxml')
+    for item in soup.select('.product-tile, .plp-product, article[class*="product"]'):
+        name_el  = item.select_one('h3, h4, .product-name, [class*="title"]')
+        price_el = item.select_one('.price, [class*="price"]')
+        model_el = item.select_one('.model-number, [class*="model"]')
+        link_el  = item.select_one('a[href]')
+        name  = clean(name_el.text)  if name_el  else ''
+        price = clean(price_el.text) if price_el else ''
+        model = clean(model_el.text) if model_el else ''
+        href  = link_el['href']      if link_el  else ''
+        if href and not href.startswith('http'):
+            href = 'https://www.frigidaire.com' + href
+        if name:
+            products.append({
+                '生產地': '美國/中國',
+                '品牌':   'Frigidaire',
+                '上市時間': datetime.now().strftime('%Y'),
+                '型號':   model,
+                '品名':   name,
+                '主要規格': '',
+                '單價':   f"USD {price}" if price else '',
+                '來源':   'Frigidaire 美國官網',
+                '連結':   href,
+            })
+    logging.info(f"Frigidaire 美國：{len(products)} 筆")
     return products
 
 
-def fetch_bestbuy_us():
-    """Best Buy 美國市場"""
+def fetch_walmart_us():
+    """Walmart 美國（公開搜尋 API）"""
     products = []
-    try:
-        r = safe_get(
-            "https://www.bestbuy.com/site/searchpage.jsp",
-            params={'st': 'dehumidifier', 'sort': 'NEWNESS'},
-        )
-        if not r:
-            return products
-        soup = BeautifulSoup(r.text, 'lxml')
-        for item in soup.select('li.sku-item')[:15]:
-            name_el  = item.select_one('h4.sku-header a')
-            price_el = item.select_one('div.priceView-hero-price span')
-            name  = name_el.text.strip()  if name_el  else ''
-            price = price_el.text.strip() if price_el else ''
-            href  = ('https://www.bestbuy.com' + name_el['href']) if name_el else ''
-            if name:
-                products.append({
-                    '生產地': '美國市場',
-                    '品牌':   '',
-                    '上市時間': datetime.now().strftime('%Y-%m'),
-                    '型號':   '',
-                    '品名':   name,
-                    '主要規格': '',
-                    '單價':   f"USD {price}" if price else '',
-                    '來源':   'Best Buy 美國',
-                    '連結':   href,
-                })
-    except Exception as e:
-        logging.warning(f"Best Buy 抓取失敗: {e}")
-    logging.info(f"Best Buy 美國：{len(products)} 筆")
+    r = safe_get(
+        "https://www.walmart.com/search",
+        params={'q': 'dehumidifier', 'sort': 'new'},
+        extra_headers={'Accept': 'text/html'},
+    )
+    if not r:
+        return products
+    soup = BeautifulSoup(r.text, 'lxml')
+    for item in soup.select('[data-item-id], [data-automation-id="product"]'):
+        name_el  = item.select_one('[itemprop="name"], .product-title, span[class*="title"]')
+        price_el = item.select_one('[itemprop="price"], [class*="price"]')
+        link_el  = item.select_one('a[href]')
+        name  = clean(name_el.text)  if name_el  else ''
+        price = clean(price_el.get('content', price_el.text)) if price_el else ''
+        href  = link_el['href'] if link_el else ''
+        if href and not href.startswith('http'):
+            href = 'https://www.walmart.com' + href
+        if name:
+            products.append({
+                '生產地': '美國市場',
+                '品牌':   '',
+                '上市時間': datetime.now().strftime('%Y-%m'),
+                '型號':   '',
+                '品名':   name,
+                '主要規格': '',
+                '單價':   f"USD {price}" if price else '',
+                '來源':   'Walmart 美國',
+                '連結':   href,
+            })
+    logging.info(f"Walmart 美國：{len(products)} 筆")
+    return products
+
+# ── 歐洲市場 ───────────────────────────────────────────────────────────────────
+
+def fetch_panasonic_eu():
+    """Panasonic 歐洲官網除濕機"""
+    products = []
+    r = safe_get("https://www.panasonic.com/uk/consumer/air-treatment/dehumidifiers.html")
+    if not r:
+        return products
+    soup = BeautifulSoup(r.text, 'lxml')
+    for item in soup.select('.product-list__item, .product-card, [class*="product-item"]'):
+        name_el  = item.select_one('h3, h4, .product-name, [class*="name"]')
+        price_el = item.select_one('.price, [class*="price"]')
+        model_el = item.select_one('.model, [class*="model"]')
+        link_el  = item.select_one('a[href]')
+        spec_el  = item.select_one('.spec, [class*="spec"], .capacity')
+        name  = clean(name_el.text)  if name_el  else ''
+        price = clean(price_el.text) if price_el else ''
+        model = clean(model_el.text) if model_el else ''
+        spec  = clean(spec_el.text)  if spec_el  else ''
+        href  = link_el['href']      if link_el  else ''
+        if href and not href.startswith('http'):
+            href = 'https://www.panasonic.com' + href
+        if name:
+            products.append({
+                '生產地': '日本/歐洲',
+                '品牌':   'Panasonic',
+                '上市時間': datetime.now().strftime('%Y'),
+                '型號':   model,
+                '品名':   name,
+                '主要規格': spec,
+                '單價':   f"GBP {price}" if price else '',
+                '來源':   'Panasonic 歐洲官網',
+                '連結':   href,
+            })
+    logging.info(f"Panasonic 歐洲：{len(products)} 筆")
     return products
 
 
-def fetch_jd_china():
-    """京東中國市場"""
+def fetch_meaco_uk():
+    """Meaco 英國品牌官網（歐洲市場代表性品牌）"""
     products = []
-    try:
-        r = safe_get(
-            "https://search.jd.com/Search",
-            params={'keyword': '除湿机', 'enc': 'utf-8', 'page': 1},
-        )
-        if not r:
-            return products
-        soup = BeautifulSoup(r.text, 'lxml')
-        for item in soup.select('li.gl-item')[:20]:
-            name_el  = item.select_one('.p-name em')
-            price_el = item.select_one('.p-price strong i')
-            sku_id   = item.get('data-sku', '')
-            name  = name_el.text.strip()  if name_el  else ''
-            price = price_el.text.strip() if price_el else ''
-            href  = f"https://item.jd.com/{sku_id}.html" if sku_id else ''
-            if name:
-                products.append({
-                    '生產地': '中國大陸',
-                    '品牌':   '',
-                    '上市時間': datetime.now().strftime('%Y-%m'),
-                    '型號':   sku_id,
-                    '品名':   name,
-                    '主要規格': '',
-                    '單價':   f"CNY {price}" if price else '',
-                    '來源':   '京東中國',
-                    '連結':   href,
-                })
-    except Exception as e:
-        logging.warning(f"京東抓取失敗: {e}")
-    logging.info(f"京東中國：{len(products)} 筆")
+    r = safe_get("https://www.meaco.com/collections/dehumidifiers")
+    if not r:
+        return products
+    soup = BeautifulSoup(r.text, 'lxml')
+    for item in soup.select('.product-item, .grid__item, [class*="product"]'):
+        name_el  = item.select_one('.product-item__title, h3, h4, [class*="title"]')
+        price_el = item.select_one('.price, [class*="price"]')
+        link_el  = item.select_one('a[href]')
+        name  = clean(name_el.text)  if name_el  else ''
+        price = clean(price_el.text) if price_el else ''
+        href  = link_el['href']      if link_el  else ''
+        if href and not href.startswith('http'):
+            href = 'https://www.meaco.com' + href
+        if name:
+            products.append({
+                '生產地': '英國/歐洲',
+                '品牌':   'Meaco',
+                '上市時間': datetime.now().strftime('%Y'),
+                '型號':   '',
+                '品名':   name,
+                '主要規格': '',
+                '單價':   f"GBP {price}" if price else '',
+                '來源':   'Meaco 英國官網',
+                '連結':   href,
+            })
+    logging.info(f"Meaco 英國：{len(products)} 筆")
+    return products
+
+# ── 中國/亞洲製造 ──────────────────────────────────────────────────────────────
+
+def fetch_midea_global():
+    """Midea 美的全球官網（中國最大品牌）"""
+    products = []
+    r = safe_get("https://www.midea.com/global/products/Air_Treatment/Dehumidifier/")
+    if not r:
+        return products
+    soup = BeautifulSoup(r.text, 'lxml')
+    for item in soup.select('.product-item, .product-card, [class*="product"]'):
+        name_el  = item.select_one('h3, h4, .title, [class*="name"]')
+        model_el = item.select_one('.model, [class*="model"]')
+        spec_el  = item.select_one('.spec, [class*="capacity"], [class*="spec"]')
+        link_el  = item.select_one('a[href]')
+        name  = clean(name_el.text)  if name_el  else ''
+        model = clean(model_el.text) if model_el else ''
+        spec  = clean(spec_el.text)  if spec_el  else ''
+        href  = link_el['href']      if link_el  else ''
+        if href and not href.startswith('http'):
+            href = 'https://www.midea.com' + href
+        if name:
+            products.append({
+                '生產地': '中國大陸',
+                '品牌':   'Midea 美的',
+                '上市時間': datetime.now().strftime('%Y'),
+                '型號':   model,
+                '品名':   name,
+                '主要規格': spec,
+                '單價':   '',
+                '來源':   'Midea 美的全球官網',
+                '連結':   href,
+            })
+    logging.info(f"Midea 全球：{len(products)} 筆")
     return products
 
 
-def fetch_taobao_alibaba():
-    """1688/阿里巴巴批發市場（中國製造）"""
+def fetch_made_in_china():
+    """Made-in-China.com（中國製造商 B2B 採購平台）"""
     products = []
-    try:
-        r = safe_get(
-            "https://s.1688.com/selloffer/offer_search.htm",
-            params={'keywords': '除湿机', 'sortType': 'newlyLaunchedDesc'},
-        )
-        if not r:
-            return products
-        soup = BeautifulSoup(r.text, 'lxml')
-        for item in soup.select('.sm-offer-item, .offer-item')[:15]:
-            name_el  = item.select_one('.sm-offer-title a, .offer-title a')
-            price_el = item.select_one('.sm-offer-priceNum, .price-num')
-            name  = name_el.text.strip()  if name_el  else ''
-            price = price_el.text.strip() if price_el else ''
-            href  = name_el['href']       if name_el  else ''
-            if href and not href.startswith('http'):
-                href = 'https:' + href
-            if name:
-                products.append({
-                    '生產地': '中國大陸',
-                    '品牌':   '',
-                    '上市時間': datetime.now().strftime('%Y-%m'),
-                    '型號':   '',
-                    '品名':   name,
-                    '主要規格': '',
-                    '單價':   f"CNY {price}" if price else '',
-                    '來源':   '1688 阿里巴巴',
-                    '連結':   href,
-                })
-    except Exception as e:
-        logging.warning(f"1688 抓取失敗: {e}")
-    logging.info(f"1688 中國：{len(products)} 筆")
+    r = safe_get(
+        "https://www.made-in-china.com/products-search/hot-china-products/Dehumidifier.html",
+        extra_headers={'Accept-Language': 'en-US,en;q=0.9'},
+    )
+    if not r:
+        return products
+    soup = BeautifulSoup(r.text, 'lxml')
+    for item in soup.select('.product-item, .pro-item, [class*="product"]'):
+        name_el    = item.select_one('h4, h3, .pro-name, [class*="name"]')
+        price_el   = item.select_one('.price, [class*="price"]')
+        company_el = item.select_one('.company-name, [class*="company"]')
+        link_el    = item.select_one('a[href]')
+        name    = clean(name_el.text)    if name_el    else ''
+        price   = clean(price_el.text)   if price_el   else ''
+        company = clean(company_el.text) if company_el else ''
+        href    = link_el['href']        if link_el    else ''
+        if href and not href.startswith('http'):
+            href = 'https://www.made-in-china.com' + href
+        if name:
+            products.append({
+                '生產地': '中國大陸',
+                '品牌':   company,
+                '上市時間': datetime.now().strftime('%Y'),
+                '型號':   '',
+                '品名':   name,
+                '主要規格': '',
+                '單價':   f"USD {price}" if price else '',
+                '來源':   'Made-in-China',
+                '連結':   href,
+            })
+    logging.info(f"Made-in-China：{len(products)} 筆")
     return products
 
+
+def fetch_haier_global():
+    """Haier 海爾全球官網"""
+    products = []
+    r = safe_get("https://www.haier.com/global/air-conditioners/dehumidifier/")
+    if not r:
+        return products
+    soup = BeautifulSoup(r.text, 'lxml')
+    for item in soup.select('.product-item, [class*="product"]'):
+        name_el  = item.select_one('h3, h4, [class*="name"], [class*="title"]')
+        model_el = item.select_one('[class*="model"]')
+        spec_el  = item.select_one('[class*="spec"], [class*="capacity"]')
+        link_el  = item.select_one('a[href]')
+        name  = clean(name_el.text)  if name_el  else ''
+        model = clean(model_el.text) if model_el else ''
+        spec  = clean(spec_el.text)  if spec_el  else ''
+        href  = link_el['href']      if link_el  else ''
+        if href and not href.startswith('http'):
+            href = 'https://www.haier.com' + href
+        if name:
+            products.append({
+                '生產地': '中國大陸',
+                '品牌':   'Haier 海爾',
+                '上市時間': datetime.now().strftime('%Y'),
+                '型號':   model,
+                '品名':   name,
+                '主要規格': spec,
+                '單價':   '',
+                '來源':   'Haier 海爾全球官網',
+                '連結':   href,
+            })
+    logging.info(f"Haier 全球：{len(products)} 筆")
+    return products
 
 # ── Excel 輸出 ─────────────────────────────────────────────────────────────────
 def save_to_excel(all_products: list) -> Path | None:
     if not all_products:
-        logging.warning("沒有收集到任何資料，不產生 Excel")
+        logging.warning("沒有收集到任何資料")
         return None
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     today    = datetime.now().strftime('%Y%m%d')
     filepath = OUTPUT_DIR / f"除濕機資料_{today}.xlsx"
-    # 若同名檔案已開啟或存在，加入時間戳避免鎖定錯誤
     if filepath.exists():
         ts = datetime.now().strftime('%H%M%S')
         filepath = OUTPUT_DIR / f"除濕機資料_{today}_{ts}.xlsx"
@@ -304,7 +400,6 @@ def save_to_excel(all_products: list) -> Path | None:
     ws = wb.active
     ws.title = f"除濕機_{today}"
 
-    # 樣式
     hdr_fill  = PatternFill("solid", fgColor="1F4E79")
     hdr_font  = Font(name='微軟正黑體', bold=True, color="FFFFFF", size=11)
     hdr_align = Alignment(horizontal='center', vertical='center', wrap_text=True)
@@ -313,14 +408,12 @@ def save_to_excel(all_products: list) -> Path | None:
     thin      = Side(style='thin')
     border    = Border(left=thin, right=thin, top=thin, bottom=thin)
 
-    # 標題列
     ws.row_dimensions[1].height = 30
     for ci, col in enumerate(COLUMNS, 1):
         c = ws.cell(row=1, column=ci, value=col)
         c.fill = hdr_fill; c.font = hdr_font
         c.alignment = hdr_align; c.border = border
 
-    # 資料列
     for ri, prod in enumerate(all_products, 2):
         fill = even_fill if ri % 2 == 0 else odd_fill
         ws.row_dimensions[ri].height = 20
@@ -331,12 +424,10 @@ def save_to_excel(all_products: list) -> Path | None:
             c.alignment = Alignment(vertical='center', wrap_text=True)
             c.border = border
 
-    # 欄寬
     for ci, w in enumerate([12, 15, 12, 18, 40, 35, 14, 14, 45], 1):
         ws.column_dimensions[get_column_letter(ci)].width = w
     ws.freeze_panes = 'A2'
 
-    # 統計摘要工作表
     ws2 = wb.create_sheet("統計摘要")
     ws2['A1'] = f"更新時間：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     ws2['A2'] = f"總筆數：{len(all_products)} 筆"
@@ -351,7 +442,6 @@ def save_to_excel(all_products: list) -> Path | None:
     logging.info(f"Excel 已儲存：{filepath}（{len(all_products)} 筆）")
     return filepath
 
-
 # ── Email 寄送 ─────────────────────────────────────────────────────────────────
 def send_email(filepath: Path, total: int, counts: dict):
     if not SMTP_USER or not SMTP_PASS:
@@ -359,32 +449,25 @@ def send_email(filepath: Path, total: int, counts: dict):
         logging.info("Email 未設定，略過寄信")
         return
 
-    today = datetime.now().strftime('%Y-%m-%d')
+    today   = datetime.now().strftime('%Y-%m-%d')
     subject = f"除濕機全球最新資料 {today}（共 {total} 筆）"
-
-    # 郵件正文
     body_lines = [
         f"您好，",
         f"",
         f"以下是 {today} 全球除濕機最新資料，共收集 {total} 筆，請見附件 Excel。",
         f"",
         f"各來源筆數：",
-    ]
-    for src, cnt in counts.items():
-        body_lines.append(f"  • {src}：{cnt} 筆")
-    body_lines += [
+    ] + [f"  • {src}：{cnt} 筆" for src, cnt in counts.items()] + [
         f"",
         f"此郵件由 GitHub Actions 自動寄出，每天 08:00（台灣時間）執行。",
     ]
-    body_text = "\n".join(body_lines)
 
     msg = MIMEMultipart()
     msg['From']    = SMTP_USER
     msg['To']      = RECIPIENT
     msg['Subject'] = subject
-    msg.attach(MIMEText(body_text, 'plain', 'utf-8'))
+    msg.attach(MIMEText("\n".join(body_lines), 'plain', 'utf-8'))
 
-    # 附加 Excel
     with open(filepath, 'rb') as f:
         part = MIMEBase('application', 'octet-stream')
         part.set_payload(f.read())
@@ -402,7 +485,6 @@ def send_email(filepath: Path, total: int, counts: dict):
         print(f"  [警告] Email 寄送失敗：{e}")
         logging.error(f"Email 寄送失敗：{e}")
 
-
 # ── 主程式 ────────────────────────────────────────────────────────────────────
 def main():
     setup_logging()
@@ -410,12 +492,19 @@ def main():
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 開始收集全球除濕機資料...")
 
     sources = [
-        ("PChome 台灣",   fetch_pchome_taiwan),
-        ("momo 購物",     fetch_momo_taiwan),
-        ("Amazon 美國",   fetch_amazon_us),
-        ("Best Buy 美國", fetch_bestbuy_us),
-        ("京東 中國",     fetch_jd_china),
-        ("1688 阿里巴巴", fetch_taobao_alibaba),
+        # 台灣
+        ("PChome 台灣",       fetch_pchome_taiwan),
+        # 美國
+        ("LG 美國官網",       fetch_lg_us),
+        ("Frigidaire 美國",   fetch_frigidaire_us),
+        ("Walmart 美國",      fetch_walmart_us),
+        # 歐洲
+        ("Panasonic 歐洲",    fetch_panasonic_eu),
+        ("Meaco 英國",        fetch_meaco_uk),
+        # 中國/亞洲
+        ("Midea 美的全球",    fetch_midea_global),
+        ("Haier 海爾全球",    fetch_haier_global),
+        ("Made-in-China",     fetch_made_in_china),
     ]
 
     all_products = []
