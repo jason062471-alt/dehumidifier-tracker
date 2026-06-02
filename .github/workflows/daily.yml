@@ -22,7 +22,7 @@ jobs:
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
-          RECIPIENT_EMAIL: tc@mjauto.com.tw
+          RECIPIENT_EMAIL: jason062471@gmail.com
         run: python dehumidifier_tracker.py
 
       - if: always()
