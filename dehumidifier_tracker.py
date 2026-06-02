@@ -469,10 +469,10 @@ def send_email(filepath: Path, total: int, counts: dict):
     msg.attach(MIMEText("\n".join(body_lines), 'plain', 'utf-8'))
 
     with open(filepath, 'rb') as f:
-        part = MIMEBase('application', 'octet-stream')
+        part = MIMEBase('application', 'vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         part.set_payload(f.read())
     encoders.encode_base64(part)
-    part.add_header('Content-Disposition', f'attachment; filename="{filepath.name}"')
+    part.add_header('Content-Disposition', 'attachment', filename=('utf-8', '', filepath.name))
     msg.attach(part)
 
     try:
