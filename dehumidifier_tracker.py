@@ -1,6 +1,6 @@
 name: Dehumidifier Daily Tracker
 
-  on:
+  "on":
     schedule:
       - cron: '0 0 * * *'
     workflow_dispatch:
