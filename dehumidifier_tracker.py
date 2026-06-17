@@ -500,8 +500,12 @@ def send_email(filepath: Path, total: int, counts: dict, changes: dict):
     n_changed = len(changes.get('changed', []))
     is_first  = changes.get('first_run', False)
 
+    no_change = not is_first and n_new == 0 and n_removed == 0 and n_changed == 0
+
     if is_first:
         subject = f"[除濕機追蹤] 首次資料建立 {today}（共 {total} 筆）"
+    elif no_change:
+        subject = f"[除濕機追蹤] 今日資料無異動 {today}"
     else:
         parts = []
         if n_new:     parts.append(f"新增 {n_new} 筆")
@@ -513,6 +517,8 @@ def send_email(filepath: Path, total: int, counts: dict, changes: dict):
 
     if is_first:
         body_lines += [f"除濕機追蹤系統已啟動，首次建立基準資料共 {total} 筆，詳見附件。", ""]
+    elif no_change:
+        body_lines += [f"{today} 全球除濕機資料與昨日相比無任何異動，共 {total} 筆。", ""]
     else:
         body_lines += [f"以下是 {today} 的資料異動摘要，詳見附件 Excel。", ""]
         if n_new:
@@ -626,9 +632,8 @@ def main():
         print("首次執行，建立基準快照並寄送初始報表。")
         logging.info("首次執行，建立基準快照")
     elif n_new == 0 and n_removed == 0 and n_changed == 0:
-        print("資料無變動，略過寄信。")
-        logging.info("資料無變動，不寄信")
-        return
+        print("資料無變動，寄送通知信。")
+        logging.info("資料無變動，寄送無異動通知")
     else:
         print(f"偵測到變動：新增 {n_new} 筆、移除 {n_removed} 筆、異動 {n_changed} 筆")
         logging.info(f"資料有變動：新增={n_new}, 移除={n_removed}, 異動={n_changed}")
