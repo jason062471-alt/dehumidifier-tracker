@@ -1,31 +1,47 @@
-name: Dehumidifier Daily Tracker
+name: 除濕機每日資料收集
 
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    - cron: '0 0 * * *'   # 每天 UTC 00:00 = 台灣時間 08:00
+  workflow_dispatch:        # 允許手動觸發（測試用）
 
 jobs:
   collect-and-email:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    permissions:
+      contents: write       # 允許 commit 快照回 repo
 
-      - uses: actions/setup-python@v5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
 
-      - run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-      - name: Run tracker
+      - name: Run dehumidifier tracker
         env:
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
-          RECIPIENT_EMAIL: jason062471@gmail.com
+          GMAIL_USER:      ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASS:  ${{ secrets.GMAIL_APP_PASS }}
+          RECIPIENT_EMAIL: tc@mjauto.com.tw
+          SNAPSHOT_FILE:   ${{ github.workspace }}/last_snapshot.json
         run: python dehumidifier_tracker.py
 
-      - if: always()
+      - name: Commit updated snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add last_snapshot.json
+          git diff --staged --quiet || git commit -m "chore: update snapshot $(date +%Y-%m-%d)"
+          git push
+
+      - name: Upload Excel as artifact (backup)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: dehumidifier-data-${{ github.run_id }}

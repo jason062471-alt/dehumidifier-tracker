@@ -8,6 +8,7 @@
 
 import os
 import re
+import json
 import time
 import logging
 import smtplib
@@ -25,8 +26,9 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
 # ── 設定 ──────────────────────────────────────────────────────────────────────
-OUTPUT_DIR = Path(os.environ.get("OUTPUT_DIR", Path.home() / "除濕機資料"))
-LOG_FILE   = OUTPUT_DIR / "run_log.txt"
+OUTPUT_DIR    = Path(os.environ.get("OUTPUT_DIR", Path.home() / "除濕機資料"))
+LOG_FILE      = OUTPUT_DIR / "run_log.txt"
+SNAPSHOT_FILE = Path(os.environ.get("SNAPSHOT_FILE", Path(__file__).parent / "last_snapshot.json"))
 
 SMTP_USER = os.environ.get("GMAIL_USER", "")
 SMTP_PASS = os.environ.get("GMAIL_APP_PASS", "")
@@ -66,6 +68,49 @@ def safe_get(url, params=None, timeout=25, extra_headers=None):
 
 def clean(text: str) -> str:
     return re.sub(r'\s+', ' ', text).strip() if text else ''
+
+# ── 快照與變動偵測 ─────────────────────────────────────────────────────────────
+
+TRACKED_FIELDS = ('品名', '型號', '單價', '主要規格')
+
+def _product_key(p: dict) -> str:
+    id_part = p.get('型號') or p.get('品名') or 'unknown'
+    return f"{p.get('來源', '')}|{id_part}"
+
+def _product_record(p: dict) -> dict:
+    return {k: p.get(k, '') for k in TRACKED_FIELDS}
+
+def load_snapshot() -> dict:
+    if SNAPSHOT_FILE.exists():
+        try:
+            with open(SNAPSHOT_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            logging.warning(f"讀取快照失敗，視為首次執行：{e}")
+    return {}
+
+def save_snapshot(products: list):
+    snapshot = {_product_key(p): _product_record(p) for p in products}
+    with open(SNAPSHOT_FILE, 'w', encoding='utf-8') as f:
+        json.dump(snapshot, f, ensure_ascii=False, indent=2)
+    logging.info(f"快照已儲存：{SNAPSHOT_FILE}（{len(snapshot)} 筆）")
+
+def detect_changes(current: list, previous: dict) -> dict:
+    """回傳 {'new': [...], 'removed': [...], 'changed': [...]}，皆為商品資料。"""
+    cur_map = {_product_key(p): (p, _product_record(p)) for p in current}
+    new, removed, changed = [], [], []
+
+    for key, (prod, record) in cur_map.items():
+        if key not in previous:
+            new.append(prod)
+        elif previous[key] != record:
+            changed.append({'product': prod, 'before': previous[key], 'after': record})
+
+    for key in previous:
+        if key not in cur_map:
+            removed.append({'key': key, **previous[key]})
+
+    return {'new': new, 'removed': removed, 'changed': changed}
 
 # ── 台灣市場 ───────────────────────────────────────────────────────────────────
 
@@ -443,23 +488,64 @@ def save_to_excel(all_products: list) -> Path | None:
     return filepath
 
 # ── Email 寄送 ─────────────────────────────────────────────────────────────────
-def send_email(filepath: Path, total: int, counts: dict):
+def send_email(filepath: Path, total: int, counts: dict, changes: dict):
     if not SMTP_USER or not SMTP_PASS:
         print("  [略過] 未設定 GMAIL_USER / GMAIL_APP_PASS，跳過寄信")
         logging.info("Email 未設定，略過寄信")
         return
 
-    today   = datetime.now().strftime('%Y-%m-%d')
-    subject = f"除濕機全球最新資料 {today}（共 {total} 筆）"
-    body_lines = [
-        f"您好，",
-        f"",
-        f"以下是 {today} 全球除濕機最新資料，共收集 {total} 筆，請見附件 Excel。",
-        f"",
-        f"各來源筆數：",
+    today = datetime.now().strftime('%Y-%m-%d')
+    n_new     = len(changes.get('new', []))
+    n_removed = len(changes.get('removed', []))
+    n_changed = len(changes.get('changed', []))
+    is_first  = changes.get('first_run', False)
+
+    if is_first:
+        subject = f"[除濕機追蹤] 首次資料建立 {today}（共 {total} 筆）"
+    else:
+        parts = []
+        if n_new:     parts.append(f"新增 {n_new} 筆")
+        if n_removed: parts.append(f"移除 {n_removed} 筆")
+        if n_changed: parts.append(f"價格/規格異動 {n_changed} 筆")
+        subject = f"[除濕機追蹤] 資料有更新 {today}（{'、'.join(parts)}）"
+
+    body_lines = ["您好，", ""]
+
+    if is_first:
+        body_lines += [f"除濕機追蹤系統已啟動，首次建立基準資料共 {total} 筆，詳見附件。", ""]
+    else:
+        body_lines += [f"以下是 {today} 的資料異動摘要，詳見附件 Excel。", ""]
+        if n_new:
+            body_lines.append(f"【新增商品 {n_new} 筆】")
+            for p in changes['new'][:10]:
+                body_lines.append(f"  + {p.get('品牌','')} {p.get('品名','')} {p.get('單價','')} ({p.get('來源','')})")
+            if n_new > 10:
+                body_lines.append(f"  … 另有 {n_new - 10} 筆，請見附件")
+            body_lines.append("")
+        if n_changed:
+            body_lines.append(f"【價格/規格異動 {n_changed} 筆】")
+            for c in changes['changed'][:10]:
+                p = c['product']
+                old_p = c['before'].get('單價', '')
+                new_p = c['after'].get('單價', '')
+                label = p.get('品牌', '') + ' ' + p.get('品名', '')
+                body_lines.append(f"  ± {label.strip()} ({p.get('來源','')})  {old_p} → {new_p}")
+            if n_changed > 10:
+                body_lines.append(f"  … 另有 {n_changed - 10} 筆，請見附件")
+            body_lines.append("")
+        if n_removed:
+            body_lines.append(f"【下架/移除 {n_removed} 筆】")
+            for r in changes['removed'][:5]:
+                body_lines.append(f"  - {r.get('品名','')} ({r.get('key','').split('|')[0]})")
+            if n_removed > 5:
+                body_lines.append(f"  … 另有 {n_removed - 5} 筆")
+            body_lines.append("")
+
+    body_lines += [
+        f"各來源總筆數：",
     ] + [f"  • {src}：{cnt} 筆" for src, cnt in counts.items()] + [
-        f"",
-        f"此郵件由 GitHub Actions 自動寄出，每天 08:00（台灣時間）執行。",
+        "",
+        "此郵件由 GitHub Actions 自動寄出，僅在資料有變動時發送。",
     ]
 
     msg = MIMEMultipart()
@@ -518,7 +604,36 @@ def main():
         print(f" {len(prods)} 筆")
         time.sleep(2)
 
-    print(f"\n共收集 {len(all_products)} 筆，正在儲存 Excel ...")
+    print(f"\n共收集 {len(all_products)} 筆")
+
+    if len(all_products) < 5:
+        print("警告：收集到的資料過少（可能抓取失敗），略過比對與寄信")
+        logging.warning(f"資料筆數過少（{len(all_products)}），略過本次更新")
+        return
+
+    # ── 比對快照 ──
+    prev_snapshot = load_snapshot()
+    is_first_run  = len(prev_snapshot) == 0
+
+    changes = detect_changes(all_products, prev_snapshot)
+    changes['first_run'] = is_first_run
+
+    n_new     = len(changes['new'])
+    n_removed = len(changes['removed'])
+    n_changed = len(changes['changed'])
+
+    if is_first_run:
+        print("首次執行，建立基準快照並寄送初始報表。")
+        logging.info("首次執行，建立基準快照")
+    elif n_new == 0 and n_removed == 0 and n_changed == 0:
+        print("資料無變動，略過寄信。")
+        logging.info("資料無變動，不寄信")
+        return
+    else:
+        print(f"偵測到變動：新增 {n_new} 筆、移除 {n_removed} 筆、異動 {n_changed} 筆")
+        logging.info(f"資料有變動：新增={n_new}, 移除={n_removed}, 異動={n_changed}")
+
+    print("正在儲存 Excel ...")
     filepath = save_to_excel(all_products)
 
     if filepath:
@@ -528,9 +643,11 @@ def main():
             s = p.get('來源', '未知')
             counts[s] = counts.get(s, 0) + 1
         print("正在寄送 Email ...")
-        send_email(filepath, len(all_products), counts)
+        send_email(filepath, len(all_products), counts, changes)
+        save_snapshot(all_products)
+        print("快照已更新。")
     else:
-        print("警告：未能收集到任何資料")
+        print("警告：未能儲存 Excel，略過寄信")
 
     logging.info("=== 除濕機資料收集結束 ===")
 
