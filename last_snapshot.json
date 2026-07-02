@@ -104,7 +104,7 @@
   "PChome 台灣|DMBZ02-A900HEDET": {
     "品名": "25L第六感智能除濕機 WDEE25TW",
     "型號": "DMBZ02-A900HEDET",
-    "單價": "NT$ 11900",
+    "單價": "NT$ 11111",
     "主要規格": ""
   },
   "PChome 台灣|DMAU0E-A900C8VLA": {
@@ -323,16 +323,16 @@
     "單價": "NT$ 3990",
     "主要規格": ""
   },
-  "PChome 台灣|DMBQ0H-A900J2DHR": {
-    "品名": "6公升除濕機 SDH-68M",
-    "型號": "DMBQ0H-A900J2DHR",
-    "單價": "NT$ 4900",
-    "主要規格": ""
-  },
   "PChome 台灣|DMBQ3A-A900IUE36": {
     "品名": "除濕機x除濕棒 二合一電子除濕機 (NI-DF2409)(可重複使用 零耗材)",
     "型號": "DMBQ3A-A900IUE36",
     "單價": "NT$ 4280",
+    "主要規格": ""
+  },
+  "PChome 台灣|DMBQ0H-A900J2DHR": {
+    "品名": "6公升除濕機 SDH-68M",
+    "型號": "DMBQ0H-A900J2DHR",
+    "單價": "NT$ 4900",
     "主要規格": ""
   },
   "PChome 台灣|DMBQ05-A900FNY97": {
@@ -431,26 +431,14 @@
     "單價": "GBP £149.99",
     "主要規格": ""
   },
-  "Made-in-China|Design Space Saving Industrial Indoor Pool Ceiling Mounted Duct Dehumidifier": {
-    "品名": "Design Space Saving Industrial Indoor Pool Ceiling Mounted Duct Dehumidifier",
+  "Made-in-China|Small Desiccant Dehumidifier with Anticorrosion Materials for Rapid Dehumidification in Hospitals": {
+    "品名": "Small Desiccant Dehumidifier with Anticorrosion Materials for Rapid Dehumidification in Hospitals",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|240L/D Industrial Dehumidifier with Temperature Control Air Conditioner for Warehouse with RS485": {
-    "品名": "240L/D Industrial Dehumidifier with Temperature Control Air Conditioner for Warehouse with RS485",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|10L Korea Style R290 Portable Dehumidifier": {
-    "品名": "10L Korea Style R290 Portable Dehumidifier",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Deye Dyd-A12A High Quality Good Portable Small Home Dehumidifier": {
-    "品名": "Deye Dyd-A12A High Quality Good Portable Small Home Dehumidifier",
+  "Made-in-China|Removable Water Tank Air Drying Portable Compact Dehumidifier 50kg": {
+    "品名": "Removable Water Tank Air Drying Portable Compact Dehumidifier 50kg",
     "型號": "",
     "單價": "",
     "主要規格": ""
@@ -461,122 +449,92 @@
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Factory Direct Manufacturer High Quality Home & Commercial Dehumidifier with CE CB ETL Certification": {
-    "品名": "Factory Direct Manufacturer High Quality Home & Commercial Dehumidifier with CE CB ETL Certification",
+  "Made-in-China|138L/D Portable Air Dehumidifier Wheels Handle Industrial Commercial 220V Used Growroom Basement": {
+    "品名": "138L/D Portable Air Dehumidifier Wheels Handle Industrial Commercial 220V Used Growroom Basement",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Intelligent Energy-Saving Low Dew Point Dehumidifier for Electronic Communications": {
-    "品名": "Intelligent Energy-Saving Low Dew Point Dehumidifier for Electronic Communications",
+  "Made-in-China|20L/Day Compact Home Dehumidifier with Auto Drain, Quiet Moisture Control for Home": {
+    "品名": "20L/Day Compact Home Dehumidifier with Auto Drain, Quiet Moisture Control for Home",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Save Energy Heater Exchange Dehumidifier": {
-    "品名": "Save Energy Heater Exchange Dehumidifier",
+  "Made-in-China|Deye Dyd-A12A High Quality Good Portable Small Home Dehumidifier": {
+    "品名": "Deye Dyd-A12A High Quality Good Portable Small Home Dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Ventilation Type Constant Temperature and Humidity Unit Air Dehumidifier Dehumidification": {
-    "品名": "Ventilation Type Constant Temperature and Humidity Unit Air Dehumidifier Dehumidification",
+  "Made-in-China|Sujing Customizable single rotor dehumidifier": {
+    "品名": "Sujing Customizable single rotor dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Factory Price Commercial Portable Industrial Workshop Dehumidifier R410A Refrigerant with CE Certificate": {
-    "品名": "Factory Price Commercial Portable Industrial Workshop Dehumidifier R410A Refrigerant with CE Certificate",
+  "Made-in-China|10L Korea Style R290 Portable Dehumidifier": {
+    "品名": "10L Korea Style R290 Portable Dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Industrial Ceiling Heating Type Heat Recovery Dehumidifier": {
-    "品名": "Industrial Ceiling Heating Type Heat Recovery Dehumidifier",
+  "Made-in-China|Manufacturer Supplies 210L/D Industrial Dehumidifier Energy-Saving Dryer for Educational and Health Care Institutions": {
+    "品名": "Manufacturer Supplies 210L/D Industrial Dehumidifier Energy-Saving Dryer for Educational and Health Care Institutions",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|138L/D Portable Dehumidifier, Industrial Dehumidifier Suitable for Humid Environments Such as Basements": {
-    "品名": "138L/D Portable Dehumidifier, Industrial Dehumidifier Suitable for Humid Environments Such as Basements",
+  "Made-in-China|Mechanical Integrated Constant Temperature and Humidity Unit Dehumidifier Machine Air Dehumidifier": {
+    "品名": "Mechanical Integrated Constant Temperature and Humidity Unit Dehumidifier Machine Air Dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Shiyun 90L/D Industrial Commercial Air Dehumidifier for Hospital Humidity Removing Machine": {
-    "品名": "Shiyun 90L/D Industrial Commercial Air Dehumidifier for Hospital Humidity Removing Machine",
+  "Made-in-China|Cost-Effective Easy Operate Greenhouse Grow Room Ceiling Dehumidifier": {
+    "品名": "Cost-Effective Easy Operate Greenhouse Grow Room Ceiling Dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Integrated Machinery Commercial Single Unit Runner Refrigerant Dehumidifier Dehumidifier Machine": {
-    "品名": "Integrated Machinery Commercial Single Unit Runner Refrigerant Dehumidifier Dehumidifier Machine",
+  "Made-in-China|Energy-Efficient Rust-Proof Basement Single Unit Runner Dehumidifier Energy Saving Dehumidifier": {
+    "品名": "Energy-Efficient Rust-Proof Basement Single Unit Runner Dehumidifier Energy Saving Dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Adjuastable Humidistat Auto Defrost Industrial Commercial Air Dehumidifier Portable": {
-    "品名": "Adjuastable Humidistat Auto Defrost Industrial Commercial Air Dehumidifier Portable",
+  "Made-in-China|Moisture Proof Indoor Low Temperature Dehumidifier Dehumidification Air Dehumidifier Unit": {
+    "品名": "Moisture Proof Indoor Low Temperature Dehumidifier Dehumidification Air Dehumidifier Unit",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Factory Price CE Certified Portable Commercial Industrial Warehouse Garage Basement Air Dehumidifier": {
-    "品名": "Factory Price CE Certified Portable Commercial Industrial Warehouse Garage Basement Air Dehumidifier",
+  "Made-in-China|Large Capacity 240L Industrial Dehumidifier for Large Room Warehouse Customized Request": {
+    "品名": "Large Capacity 240L Industrial Dehumidifier for Large Room Warehouse Customized Request",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Cost-Effective High-Efficiency Industrial Air Dehumidifier for Industrial Site": {
-    "品名": "Cost-Effective High-Efficiency Industrial Air Dehumidifier for Industrial Site",
+  "Made-in-China|Compact Industrial Desiccant High Efficiency Rotary Dehumidifier Lyh-4500 for Moisture Control": {
+    "品名": "Compact Industrial Desiccant High Efficiency Rotary Dehumidifier Lyh-4500 for Moisture Control",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|26L Ceiling Wall Mounted Dehumidifier for Swimming Pool": {
-    "品名": "26L Ceiling Wall Mounted Dehumidifier for Swimming Pool",
+  "Made-in-China|High Performance Indoor Industrial Dehumidifier High Efficiency Dehumidifier System": {
+    "品名": "High Performance Indoor Industrial Dehumidifier High Efficiency Dehumidifier System",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Auto-Restart Built-in-Humidistat Inverter Gravity-Drainage Thermoelectric Air Dryer Dehumidifier for Telecom Facility Protection": {
-    "品名": "Auto-Restart Built-in-Humidistat Inverter Gravity-Drainage Thermoelectric Air Dryer Dehumidifier for Telecom Facility Protection",
+  "Made-in-China|24h Timer Setting Air Drying Dehumification Indoor Ceiling Mounted Dehumidifier for Bathroom": {
+    "品名": "24h Timer Setting Air Drying Dehumification Indoor Ceiling Mounted Dehumidifier for Bathroom",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Mulon 100L 240L 480L Optional Humidity Control Machine Industrial Dehumidifier for Warehouse": {
-    "品名": "Mulon 100L 240L 480L Optional Humidity Control Machine Industrial Dehumidifier for Warehouse",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|2022 New Products 155 Ppd Commercial Industrial Water Damage Restoration Lgr Dehumidifier": {
-    "品名": "2022 New Products 155 Ppd Commercial Industrial Water Damage Restoration Lgr Dehumidifier",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Ventilated Room Ceiling Dehumidifier Air Dehumidifier Industrial Dehumidifier": {
-    "品名": "Ventilated Room Ceiling Dehumidifier Air Dehumidifier Industrial Dehumidifier",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Commercial Dehumidifier with Handle for Water Damage Disaster Restoration": {
-    "品名": "Commercial Dehumidifier with Handle for Water Damage Disaster Restoration",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|60L/D Factory Price Crawl Space Ceiling Duct Industrial Commercial Air Dehumidifier for Basement with WiFi Function and Mobile APP": {
-    "品名": "60L/D Factory Price Crawl Space Ceiling Duct Industrial Commercial Air Dehumidifier for Basement with WiFi Function and Mobile APP",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Lyh-Ahd40d Industrial Rotor Dehumidifier with Electric Regeneration for Clean Rooms": {
-    "品名": "Lyh-Ahd40d Industrial Rotor Dehumidifier with Electric Regeneration for Clean Rooms",
+  "Made-in-China|8.8L/H Industrial Dehumidifier Energy-Saving Dehumidification Equipment for Gymnasium with Wave-Shaped Filter Screen": {
+    "品名": "8.8L/H Industrial Dehumidifier Energy-Saving Dehumidification Equipment for Gymnasium with Wave-Shaped Filter Screen",
     "型號": "",
     "單價": "",
     "主要規格": ""
@@ -587,26 +545,68 @@
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Fresh Air Commercial Constant Humidity Purification Integrated Machine Dehumidifier Machine Air Dehumidifier": {
-    "品名": "Fresh Air Commercial Constant Humidity Purification Integrated Machine Dehumidifier Machine Air Dehumidifier",
+  "Made-in-China|Low Consumption Constant Temperature and Humidity Unit Energy Saving Dehumidifier High Efficiency Dehumidifier": {
+    "品名": "Low Consumption Constant Temperature and Humidity Unit Energy Saving Dehumidifier High Efficiency Dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Honeycomb Type Dehumidifying Dryer & Pet Material Dehumidifying Dryer Industrial Dehumidifier": {
-    "品名": "Honeycomb Type Dehumidifying Dryer & Pet Material Dehumidifying Dryer Industrial Dehumidifier",
+  "Made-in-China|60L Ceiling Dehumidifier Industrial Commercial Greenhouse Dehumidifier Grow Room Tent": {
+    "品名": "60L Ceiling Dehumidifier Industrial Commercial Greenhouse Dehumidifier Grow Room Tent",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Electrical Humidity Control 1500L Industrial Silica Gel Rotary Desiccant Dehumidifier": {
-    "品名": "Electrical Humidity Control 1500L Industrial Silica Gel Rotary Desiccant Dehumidifier",
+  "Made-in-China|New Products 2021 Innovative Product Flood Water Damage Restoration Commercial Dehumidifier Lgr Dehumidifier": {
+    "品名": "New Products 2021 Innovative Product Flood Water Damage Restoration Commercial Dehumidifier Lgr Dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|High Performance Indoor Industrial Dehumidifier High Efficiency Dehumidifier System": {
-    "品名": "High Performance Indoor Industrial Dehumidifier High Efficiency Dehumidifier System",
+  "Made-in-China|90L/D Industrial Commercial Air Dehumidifier for Garage Household Basement High Efficiency Have WiFi Function Mobile APP Control Option": {
+    "品名": "90L/D Industrial Commercial Air Dehumidifier for Garage Household Basement High Efficiency Have WiFi Function Mobile APP Control Option",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|High-Cfm Auto-Restart Air Dryer Dehumidifier Unit for Climate Control": {
+    "品名": "High-Cfm Auto-Restart Air Dryer Dehumidifier Unit for Climate Control",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Compact Industrial Desiccant High Efficiency Rotary Dehumidifier Lyh-3000 for Moisture Control": {
+    "品名": "Compact Industrial Desiccant High Efficiency Rotary Dehumidifier Lyh-3000 for Moisture Control",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Shiyun 360L/D Industrial Air Dehumidifier for Agriculture System Plant Factory Drying": {
+    "品名": "Shiyun 360L/D Industrial Air Dehumidifier for Agriculture System Plant Factory Drying",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Smart Constant Humidity Industrial Dehumidifier Dehumidifier Machine Refrigerant Dehumidifier": {
+    "品名": "Smart Constant Humidity Industrial Dehumidifier Dehumidifier Machine Refrigerant Dehumidifier",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Indoor Purifying Constant Humidity Purification Integrated Machine Air Dehumidifier Industrial Dehumidifier": {
+    "品名": "Indoor Purifying Constant Humidity Purification Integrated Machine Air Dehumidifier Industrial Dehumidifier",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|60L/D Factory Price Crawl Space Ceiling Duct Industrial Commercial Air Dehumidifier for Basement with WiFi Function and Mobile APP": {
+    "品名": "60L/D Factory Price Crawl Space Ceiling Duct Industrial Commercial Air Dehumidifier for Basement with WiFi Function and Mobile APP",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Compact Industrial Desiccant High Efficiency Rotary Dehumidifier Lyh-1500 for Moisture Control": {
+    "品名": "Compact Industrial Desiccant High Efficiency Rotary Dehumidifier Lyh-1500 for Moisture Control",
     "型號": "",
     "單價": "",
     "主要規格": ""
