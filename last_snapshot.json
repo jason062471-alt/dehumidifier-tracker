@@ -341,16 +341,16 @@
     "單價": "NT$ 11420",
     "主要規格": ""
   },
-  "PChome 台灣|DMBM2E-A900G6TV5": {
-    "品名": "一機雙效清淨除溼機(SG-108DHX買大送小加贈精美除濕機)",
-    "型號": "DMBM2E-A900G6TV5",
-    "單價": "NT$ 6980",
-    "主要規格": ""
-  },
   "PChome 台灣|DMBQ0H-A900JA0AU": {
     "品名": "10.5L負離子清淨除濕機 SDH-108M",
     "型號": "DMBQ0H-A900JA0AU",
     "單價": "NT$ 7500",
+    "主要規格": ""
+  },
+  "PChome 台灣|DMBM2E-A900G6TV5": {
+    "品名": "一機雙效清淨除溼機(SG-108DHX買大送小加贈精美除濕機)",
+    "型號": "DMBM2E-A900G6TV5",
+    "單價": "NT$ 6980",
     "主要規格": ""
   },
   "PChome 台灣|DMBQ0X-A900J0PWC": {
@@ -407,14 +407,14 @@
     "單價": "GBP £329.99",
     "主要規格": ""
   },
-  "Meaco 英國官網|Meaco 12L Low Energy Dehumidifier and Air Purifier": {
-    "品名": "Meaco 12L Low Energy Dehumidifier and Air Purifier",
+  "Meaco 英國官網|12L Low Energy Dehumidifier and Air Purifier": {
+    "品名": "12L Low Energy Dehumidifier and Air Purifier",
     "型號": "",
     "單價": "GBP £189.99",
     "主要規格": ""
   },
-  "Meaco 英國官網|Meaco 20L Low Energy Dehumidifier and Air Purifier": {
-    "品名": "Meaco 20L Low Energy Dehumidifier and Air Purifier",
+  "Meaco 英國官網|20L Low Energy Dehumidifier and Air Purifier": {
+    "品名": "20L Low Energy Dehumidifier and Air Purifier",
     "型號": "",
     "單價": "GBP £259.99",
     "主要規格": ""
@@ -431,8 +431,32 @@
     "單價": "GBP £149.99",
     "主要規格": ""
   },
-  "Made-in-China|Desiccant Dehumidifier with Precision humidity control for Industrial": {
-    "品名": "Desiccant Dehumidifier with Precision humidity control for Industrial",
+  "Made-in-China|Energy-Efficient Precision Control Low Dew Point Dehumidifier for Clean Rooms": {
+    "品名": "Energy-Efficient Precision Control Low Dew Point Dehumidifier for Clean Rooms",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|12L/Day Smart Home Dehumidifier": {
+    "品名": "12L/Day Smart Home Dehumidifier",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Promotion Silica Gel Wheel Low Temperature Desiccant Dehumidifier 1500m³ /H": {
+    "品名": "Promotion Silica Gel Wheel Low Temperature Desiccant Dehumidifier 1500m³ /H",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|240L/D Dehumidification Capacity Compressor Cooling System Dehumidifier for Workshop with Timer Function": {
+    "品名": "240L/D Dehumidification Capacity Compressor Cooling System Dehumidifier for Workshop with Timer Function",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Design Space Saving Industrial Indoor Pool Ceiling Mounted Duct Dehumidifier": {
+    "品名": "Design Space Saving Industrial Indoor Pool Ceiling Mounted Duct Dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
@@ -449,62 +473,20 @@
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|High Efficiency and Energy Saving Flower Planting Dehumidifier 225pints": {
-    "品名": "High Efficiency and Energy Saving Flower Planting Dehumidifier 225pints",
+  "Made-in-China|Rotary Compressor Good Feedback Hot-Gas Bypass Dehumidifier": {
+    "品名": "Rotary Compressor Good Feedback Hot-Gas Bypass Dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|12L/Day Dehumidifier with Automatic Humidity Sensor": {
-    "品名": "12L/Day Dehumidifier with Automatic Humidity Sensor",
+  "Made-in-China|Sterilization Lab Constant Humidity Purification Integrated Machine Refrigerant Dehumidifier Industrial Dehumidifier": {
+    "品名": "Sterilization Lab Constant Humidity Purification Integrated Machine Refrigerant Dehumidifier Industrial Dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Dy-6105eb Hot Product Dehumidifier for Hospital": {
-    "品名": "Dy-6105eb Hot Product Dehumidifier for Hospital",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Large Capacity 240L Industrial Dehumidifier for Large Room Warehouse Customized Request": {
-    "品名": "Large Capacity 240L Industrial Dehumidifier for Large Room Warehouse Customized Request",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|138L/D Portable Air Dehumidifier Wheels Handle Industrial Commercial 220V Used Growroom Basement": {
-    "品名": "138L/D Portable Air Dehumidifier Wheels Handle Industrial Commercial 220V Used Growroom Basement",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|High Efficiency Air Dryer for Optimal Data Center Humidity Control": {
-    "品名": "High Efficiency Air Dryer for Optimal Data Center Humidity Control",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|High Performance Durable Workshop Single Unit Runner Dehumidifier Machine Air Dehumidifier": {
-    "品名": "High Performance Durable Workshop Single Unit Runner Dehumidifier Machine Air Dehumidifier",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|138L/D Portable Dehumidifier, Industrial Dehumidifier Suitable for Humid Environments Such as Basements": {
-    "品名": "138L/D Portable Dehumidifier, Industrial Dehumidifier Suitable for Humid Environments Such as Basements",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|High-Performance Moisture-Proof Workshop Single Unit Runner High Efficiency Dehumidifier Moisture Removal Machine": {
-    "品名": "High-Performance Moisture-Proof Workshop Single Unit Runner High Efficiency Dehumidifier Moisture Removal Machine",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Heavy Duty Industrial Constant Humidity Purification Integrated Machine Compressor Dehumidifier Industrial Dehumidifier": {
-    "品名": "Heavy Duty Industrial Constant Humidity Purification Integrated Machine Compressor Dehumidifier Industrial Dehumidifier",
+  "Made-in-China|CE certified air dryer Low dew point dehumidifier for lithium-ion battery processes": {
+    "品名": "CE certified air dryer Low dew point dehumidifier for lithium-ion battery processes",
     "型號": "",
     "單價": "",
     "主要規格": ""
@@ -515,20 +497,62 @@
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Stable Operation Factory Industrial Dehumidifier Dehumidifier Compressor": {
-    "品名": "Stable Operation Factory Industrial Dehumidifier Dehumidifier Compressor",
+  "Made-in-China|Heavy Duty Industrial Constant Humidity Purification Integrated Machine Compressor Dehumidifier Industrial Dehumidifier": {
+    "品名": "Heavy Duty Industrial Constant Humidity Purification Integrated Machine Compressor Dehumidifier Industrial Dehumidifier",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Shiyun Commercial 288L Air Garbage Drying Dehumidifier Ceiling Mounted Space Save Design": {
-    "品名": "Shiyun Commercial 288L Air Garbage Drying Dehumidifier Ceiling Mounted Space Save Design",
+  "Made-in-China|138L/D Portable Dehumidifier, Industrial Dehumidifier Suitable for Humid Environments Such as Basements": {
+    "品名": "138L/D Portable Dehumidifier, Industrial Dehumidifier Suitable for Humid Environments Such as Basements",
     "型號": "",
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Shiyun 480L/D Commercial Industrial Air Dehumidifier for Shopping Mall Air Drying": {
-    "品名": "Shiyun 480L/D Commercial Industrial Air Dehumidifier for Shopping Mall Air Drying",
+  "Made-in-China|Indoor Purifying Constant Humidity Purification Integrated Machine Air Dehumidifier Industrial Dehumidifier": {
+    "品名": "Indoor Purifying Constant Humidity Purification Integrated Machine Air Dehumidifier Industrial Dehumidifier",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Ventilated Room Ceiling Dehumidifier Air Dehumidifier": {
+    "品名": "Ventilated Room Ceiling Dehumidifier Air Dehumidifier",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Mulon 100L 240L 480L Optional Humidity Control Machine Industrial Dehumidifier for Warehouse": {
+    "品名": "Mulon 100L 240L 480L Optional Humidity Control Machine Industrial Dehumidifier for Warehouse",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Fresh Air Commercial Constant Humidity Purification Integrated Machine Dehumidifier Machine Air Dehumidifier": {
+    "品名": "Fresh Air Commercial Constant Humidity Purification Integrated Machine Dehumidifier Machine Air Dehumidifier",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|168 Liters/Day Temperature Control Dehumidifier Air Conditioner for Laboratory with RS485 Function": {
+    "品名": "168 Liters/Day Temperature Control Dehumidifier Air Conditioner for Laboratory with RS485 Function",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Factory Workshop Constant Temperature and Humidity Unit Industrial Dehumidifier High Efficiency Dehumidifier": {
+    "品名": "Factory Workshop Constant Temperature and Humidity Unit Industrial Dehumidifier High Efficiency Dehumidifier",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Greenhouse Small Commercial Portable 90L Per Day Air Dehumidifier with Handles": {
+    "品名": "Greenhouse Small Commercial Portable 90L Per Day Air Dehumidifier with Handles",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|168L/D Shiyun Industrial Dehumidifier Suitable for Shopping Mall Central HVAC System": {
+    "品名": "168L/D Shiyun Industrial Dehumidifier Suitable for Shopping Mall Central HVAC System",
     "型號": "",
     "單價": "",
     "主要規格": ""
@@ -539,62 +563,8 @@
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|WiFi Ceiling Mounted Dehumidifier 20L/D 40ppd Ducted Dehumidifying Unit for Gym Greenhouse": {
-    "品名": "WiFi Ceiling Mounted Dehumidifier 20L/D 40ppd Ducted Dehumidifying Unit for Gym Greenhouse",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Heavy Duty Explosion Proof Dehumidifier Dehumidifier Machine Compressor Dehumidifier": {
-    "品名": "Heavy Duty Explosion Proof Dehumidifier Dehumidifier Machine Compressor Dehumidifier",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Precision Safety Explosion Proof Dehumidifier Dehumidification Compressor Dehumidifier": {
-    "品名": "Precision Safety Explosion Proof Dehumidifier Dehumidification Compressor Dehumidifier",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|350ppd Industrial Dehumidifier Air Dryer for Warehouse Have Automatically Defrost with Timer": {
-    "品名": "350ppd Industrial Dehumidifier Air Dryer for Warehouse Have Automatically Defrost with Timer",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Adjuastable Humidistat Auto Defrost Industrial Commercial Air Dehumidifier Portable": {
-    "品名": "Adjuastable Humidistat Auto Defrost Industrial Commercial Air Dehumidifier Portable",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Moisture Proof Indoor Low Temperature Dehumidifier Dehumidification Air Dehumidifier Unit": {
-    "品名": "Moisture Proof Indoor Low Temperature Dehumidifier Dehumidification Air Dehumidifier Unit",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Heavy Duty Constant Temperature and Humidity Unit Industrial Dehumidifier Compressor Dehumidifier": {
-    "品名": "Heavy Duty Constant Temperature and Humidity Unit Industrial Dehumidifier Compressor Dehumidifier",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Factory Price CE Certified Portable Commercial Industrial Warehouse Garage Basement Air Dehumidifier": {
-    "品名": "Factory Price CE Certified Portable Commercial Industrial Warehouse Garage Basement Air Dehumidifier",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|506 Pints/D High Capacity Agricultural Ceiling Mounted Dehumidifier for Trolmaster Connect": {
-    "品名": "506 Pints/D High Capacity Agricultural Ceiling Mounted Dehumidifier for Trolmaster Connect",
-    "型號": "",
-    "單價": "",
-    "主要規格": ""
-  },
-  "Made-in-China|Mulon-D150 High Efficiency Greenhouse Industrial Ceiling Dehumidifier for Basement Swimming Pool": {
-    "品名": "Mulon-D150 High Efficiency Greenhouse Industrial Ceiling Dehumidifier for Basement Swimming Pool",
+  "Made-in-China|Shiyun Commercial 288L Air Garbage Drying Dehumidifier Ceiling Mounted Space Save Design": {
+    "品名": "Shiyun Commercial 288L Air Garbage Drying Dehumidifier Ceiling Mounted Space Save Design",
     "型號": "",
     "單價": "",
     "主要規格": ""
@@ -605,8 +575,38 @@
     "單價": "",
     "主要規格": ""
   },
-  "Made-in-China|Fresh Air Commercial Constant Humidity Purification Integrated Machine Dehumidifier Machine Air Dehumidifier": {
-    "品名": "Fresh Air Commercial Constant Humidity Purification Integrated Machine Dehumidifier Machine Air Dehumidifier",
+  "Made-in-China|Smart Constant Humidity Low Temperature Dehumidifier Dehumidification Compressor Dehumidifier": {
+    "品名": "Smart Constant Humidity Low Temperature Dehumidifier Dehumidification Compressor Dehumidifier",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Heavy Duty Constant Temperature and Humidity Unit Industrial Dehumidifier Compressor Dehumidifier": {
+    "品名": "Heavy Duty Constant Temperature and Humidity Unit Industrial Dehumidifier Compressor Dehumidifier",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Commercial Push Hand Dehumidifier Air Dryer for Household Have 50L-100L/D Capacity with Automatic Defrost": {
+    "品名": "Commercial Push Hand Dehumidifier Air Dryer for Household Have 50L-100L/D Capacity with Automatic Defrost",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|High Performance Indoor Industrial Dehumidifier High Efficiency Dehumidifier System": {
+    "品名": "High Performance Indoor Industrial Dehumidifier High Efficiency Dehumidifier System",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|Integrated Machinery Commercial Single Unit Runner Refrigerant Dehumidifier Dehumidifier Machine": {
+    "品名": "Integrated Machinery Commercial Single Unit Runner Refrigerant Dehumidifier Dehumidifier Machine",
+    "型號": "",
+    "單價": "",
+    "主要規格": ""
+  },
+  "Made-in-China|24h Timer Setting Air Drying Dehumification Indoor Ceiling Mounted Dehumidifier for Bathroom": {
+    "品名": "24h Timer Setting Air Drying Dehumification Indoor Ceiling Mounted Dehumidifier for Bathroom",
     "型號": "",
     "單價": "",
     "主要規格": ""
